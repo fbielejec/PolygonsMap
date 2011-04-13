@@ -20,6 +20,7 @@ separated coordinate values. This would allow us to use different map projection
 zoom in to areas of interest, save output to post script (eps) images and many 
 others.
 
+To operate :left click to rotate, right click to zoom, both or middle to pan.
 ________________________________________________________________________________
                             COMPILING
 
