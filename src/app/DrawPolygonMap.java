@@ -1,5 +1,7 @@
 package app;
 
+import java.text.ParseException;
+
 import processing.core.PApplet;
 
 @SuppressWarnings("serial")
@@ -20,24 +22,31 @@ public class DrawPolygonMap extends PApplet {
 
 	public void setup() {
 
-		size(800, 500);
+		try {
 
-		mapX1 = 30;
-		mapX2 = width - mapX1;
-		mapY1 = 20;
-		mapY2 = height - mapY1;
+			size(800, 500);
 
-		// load the map data
-		mapdata = new ReadLocations(getClass().getResource("world_map.txt")
-				.getPath());
+			mapX1 = 30;
+			mapX2 = width - mapX1;
+			mapY1 = 20;
+			mapY2 = height - mapY1;
 
-		// calculate min/max longitude
-		minX = mapdata.getLongMin();
-		maxX = mapdata.getLongMax();
-		// calculate min/max latitude
-		minY = getMercatorLatitude(mapdata.getLatMin());
-		maxY = getMercatorLatitude(mapdata.getLatMax());
+			// load the map data
 
+			mapdata = new ReadLocations(getClass().getResource("world_map.txt")
+					.getPath());
+
+			// calculate min/max longitude
+			minX = mapdata.getLongMin();
+			maxX = mapdata.getLongMax();
+			// calculate min/max latitude
+			minY = getMercatorLatitude(mapdata.getLatMin());
+			maxY = getMercatorLatitude(mapdata.getLatMax());
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
 	}// END:setup
 
 	public void draw() {
@@ -108,7 +117,7 @@ public class DrawPolygonMap extends PApplet {
 
 				vertex(X, Y);
 				vertex(XEND, YEND);
-//				 vertex(X, YEND);
+				// vertex(X, YEND);
 				// vertex(Y, XEND);
 				// vertex(X, XEND);
 				// vertex(Y, YEND);
