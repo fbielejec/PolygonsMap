@@ -1,6 +1,8 @@
-package app;
+package templates;
 
 import java.text.ParseException;
+
+import utils.ReadLocations;
 
 import peasy.PeasyCam;
 import processing.core.PApplet;

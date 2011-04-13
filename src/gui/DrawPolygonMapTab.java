@@ -1,0 +1,186 @@
+package gui;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.ScrollPane;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.SwingWorker;
+import javax.swing.border.TitledBorder;
+
+import templates.DrawPolygonMap;
+
+@SuppressWarnings("serial")
+public class DrawPolygonMapTab extends JPanel {
+
+	// Sizing constants
+	private final int leftPanelWidth = 200;
+	private final int leftPanelHeight = 1050;
+
+	// Colors
+	private Color backgroundColor;
+
+	// Buttons
+	private JButton generateProcessing;
+	private JButton saveProcessingPlot;
+
+	// Left tools pane
+	private JPanel leftPanel;
+	private JPanel tmpPanel;
+
+	// Processing pane
+	private DrawPolygonMap drawPolygonMap;
+
+	// Progress bar
+	private JProgressBar progressBar;
+
+	public DrawPolygonMapTab() {
+
+		// Setup miscallenous
+		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+		backgroundColor = new Color(231, 237, 246);
+
+		// Setup buttons
+		generateProcessing = new JButton("Plot");
+		saveProcessingPlot = new JButton("Save");
+		
+		// Setup progress bar
+		progressBar = new JProgressBar();
+
+		/**
+		 * left tools pane
+		 * */
+		leftPanel = new JPanel();
+		leftPanel.setBackground(backgroundColor);
+		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+		leftPanel.setPreferredSize(new Dimension(leftPanelWidth,
+				leftPanelHeight));
+
+		// Listeners
+		generateProcessing.addActionListener(new ListenGenerateProcessing());
+		saveProcessingPlot.addActionListener(new ListenSaveProcessingPlot());
+
+		tmpPanel = new JPanel();
+		tmpPanel.setMaximumSize(new Dimension(leftPanelWidth + 60, 100));
+		tmpPanel.setBackground(backgroundColor);
+		tmpPanel.setBorder(new TitledBorder("Plot map:"));
+		tmpPanel.add(generateProcessing);
+		tmpPanel.add(progressBar);
+		leftPanel.add(tmpPanel);
+
+		tmpPanel = new JPanel();
+		tmpPanel.setMaximumSize(new Dimension(leftPanelWidth + 60, 100));
+		tmpPanel.setBackground(backgroundColor);
+		tmpPanel.setBorder(new TitledBorder("Save plot:"));
+		tmpPanel.add(saveProcessingPlot);
+		leftPanel.add(tmpPanel);
+
+		JScrollPane leftScrollPane = new JScrollPane(leftPanel,
+				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		leftScrollPane.setMinimumSize(new Dimension(leftPanelWidth + 60,
+				leftPanelHeight));
+		add(leftScrollPane, BorderLayout.CENTER);
+
+		/**
+		 * Processing pane
+		 * */
+		drawPolygonMap = new DrawPolygonMap();
+		drawPolygonMap.setPreferredSize(new Dimension(2048, 1025));
+
+		if (System.getProperty("java.runtime.name").toLowerCase().startsWith(
+				"openjdk")) {
+
+			JScrollPane rightScrollPane = new JScrollPane(drawPolygonMap,
+					JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+					JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+			add(rightScrollPane, BorderLayout.CENTER);
+
+		} else {
+
+			ScrollPane rightScrollPane = new ScrollPane(
+					ScrollPane.SCROLLBARS_ALWAYS);
+			rightScrollPane.add(drawPolygonMap);
+			add(rightScrollPane, BorderLayout.CENTER);
+
+		}
+
+	}// END: continuousModelTab
+
+	private class ListenGenerateProcessing implements ActionListener {
+		public void actionPerformed(ActionEvent ev) {
+
+			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+
+				// Executed in background thread
+				public Void doInBackground() {
+
+					try {
+
+						generateProcessing.setEnabled(false);
+						progressBar.setIndeterminate(true);
+
+						drawPolygonMap.init();
+
+						System.out.println("Finished. \n");
+
+					} catch (Exception e) {
+
+						e.printStackTrace();
+
+						String msg = String.format("Unexpected problem: %s", e
+								.toString());
+
+						JOptionPane.showMessageDialog(null, msg, "Error",
+								JOptionPane.ERROR_MESSAGE);
+					}
+
+					return null;
+				}// END: doInBackground()
+
+				// Executed in event dispatch thread
+				public void done() {
+
+					generateProcessing.setEnabled(true);
+					progressBar.setIndeterminate(false);
+
+				}
+			};
+
+			worker.execute();
+		}
+	}// END: ListenGenerateProcessing
+
+	private class ListenSaveProcessingPlot implements ActionListener {
+		public void actionPerformed(ActionEvent ev) {
+
+			try {
+
+				JFileChooser chooser = new JFileChooser();
+				chooser.setDialogTitle("Saving as png file...");
+
+				chooser.showSaveDialog(chooser);
+				File file = chooser.getSelectedFile();
+				String plotToSaveFilename = file.getAbsolutePath();
+
+				drawPolygonMap.save(plotToSaveFilename);
+				System.out.println("Saved " + plotToSaveFilename + "\n");
+
+			} catch (Exception e) {
+				System.err.println("Could not save! \n");
+			}
+
+		}// END: actionPerformed
+	}// END: class
+
+}// END class
