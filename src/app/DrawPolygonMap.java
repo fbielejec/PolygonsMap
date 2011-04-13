@@ -44,10 +44,10 @@ public class DrawPolygonMap extends PApplet {
 			minY = getMercatorLatitude(mapdata.getLatMin());
 			maxY = getMercatorLatitude(mapdata.getLatMax());
 
-			cam = new PeasyCam(this, width, height, 0, 50);
-			 cam.setMinimumDistance(0);
-//			 cam.setMaximumDistance(100);
-			
+			cam = new PeasyCam(this, 400, 250, 0, 100);
+//			 cam.setMinimumDistance(100);
+//			 cam.setMaximumDistance(500);
+
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -62,6 +62,10 @@ public class DrawPolygonMap extends PApplet {
 		drawVertGrid();
 		drawMapPolygons();
 		drawOutline();
+
+		System.out.println(cam.getDistance());
+
+		// PrintArray(cam.getPosition());
 
 	}// END:draw
 
@@ -178,5 +182,11 @@ public class DrawPolygonMap extends PApplet {
 
 		return (float) y;
 	}
+
+	public void PrintArray(float[] x) {
+		for (int i = 0; i < x.length; i++) {
+			System.out.println(x[i]);
+		}
+	}// END: PrintArray
 
 }// END: PlotOnMap class
