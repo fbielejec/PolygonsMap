@@ -2,11 +2,13 @@ package app;
 
 import java.text.ParseException;
 
+import peasy.PeasyCam;
 import processing.core.PApplet;
 
 @SuppressWarnings("serial")
 public class DrawPolygonMap extends PApplet {
 
+	private PeasyCam cam;
 	private static ReadLocations mapdata;
 	// min/max longitude
 	private static float minX, maxX;
@@ -24,15 +26,16 @@ public class DrawPolygonMap extends PApplet {
 
 		try {
 
-			size(800, 500);
-
+			size(800, 500, P3D);// 800, 500
+			
+			cam = new PeasyCam(this, 0);
+			
 			mapX1 = 30;
 			mapX2 = width - mapX1;
 			mapY1 = 20;
 			mapY2 = height - mapY1;
 
 			// load the map data
-
 			mapdata = new ReadLocations(getClass().getResource("world_map.txt")
 					.getPath());
 
@@ -46,19 +49,10 @@ public class DrawPolygonMap extends PApplet {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 	}// END:setup
 
 	public void draw() {
-
-		pushMatrix();
-
-		float sval = (float) 1.0;
-
-		if (mousePressed) {
-			sval = (float) 1.5;
-		}
-		scale(sval);
 
 		smooth();
 		drawPlotArea();
@@ -66,8 +60,6 @@ public class DrawPolygonMap extends PApplet {
 		drawVertGrid();
 		drawMapPolygons();
 		drawOutline();
-
-		popMatrix();
 
 	}// END:draw
 
@@ -88,7 +80,6 @@ public class DrawPolygonMap extends PApplet {
 		// Dark grey polygon boundaries
 		stroke(105, 105, 105, 255);
 		strokeWeight(1);
-		strokeJoin(ROUND);
 		// Sand brown polygon filling
 		fill(244, 164, 96, 255);
 

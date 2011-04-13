@@ -23,9 +23,10 @@ others.
 ________________________________________________________________________________
                             COMPILING
 
-Depends on the core Processing library:
+Depends on the following Processing libraries:
 
 core.jar
+PeasyCam.jar
 
 ________________________________________________________________________________
                               TODO
