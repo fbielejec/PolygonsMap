@@ -8,6 +8,8 @@ import processing.core.PApplet;
 @SuppressWarnings("serial")
 public class DrawPolygonMap extends PApplet {
 
+	private final boolean fromJar = false;
+
 	private PeasyCam cam;
 	private static ReadLocations mapdata;
 	// min/max longitude
@@ -27,6 +29,9 @@ public class DrawPolygonMap extends PApplet {
 		try {
 
 			size(800, 500, P3D);// 800, 500
+			setCam(new PeasyCam(this, width / 2, height / 2, 0, 450));
+			// cam.setMinimumDistance(100);
+			// cam.setMaximumDistance(500);
 
 			mapX1 = 30;
 			mapX2 = width - mapX1;
@@ -34,8 +39,15 @@ public class DrawPolygonMap extends PApplet {
 			mapY2 = height - mapY1;
 
 			// load the map data
-			mapdata = new ReadLocations(getClass().getResource("world_map.txt")
-					.getPath());
+			if (fromJar) {
+
+				mapdata = new ReadLocations("jar:"
+						+ getClass().getResource("world_map.txt").getPath());
+			} else {
+
+				mapdata = new ReadLocations(this.getClass().getResource(
+						"world_map.txt").getPath());
+			}
 
 			// calculate min/max longitude
 			minX = mapdata.getLongMin();
@@ -43,10 +55,6 @@ public class DrawPolygonMap extends PApplet {
 			// calculate min/max latitude
 			minY = getMercatorLatitude(mapdata.getLatMin());
 			maxY = getMercatorLatitude(mapdata.getLatMax());
-
-			setCam(new PeasyCam(this, width/2, height/2, 0, 450));
-			// cam.setMinimumDistance(100);
-			// cam.setMaximumDistance(500);
 
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -63,17 +71,17 @@ public class DrawPolygonMap extends PApplet {
 		drawMapPolygons();
 		drawOutline();
 
-		System.out.println(mapX1);
-		System.out.println(mapX2);
-		System.out.println(mapY1);
-		System.out.println(mapY2);
-		System.out.println(width);
-		System.out.println(height);
-		
-//		 System.out.println(cam.getDistance());
-//		 System.out.println("---------------");
-//		 PrintArray(cam.getPosition());
-//		 System.out.println("===============");
+		// System.out.println(mapX1);
+		// System.out.println(mapX2);
+		// System.out.println(mapY1);
+		// System.out.println(mapY2);
+		// System.out.println(width);
+		// System.out.println(height);
+
+		// System.out.println(cam.getDistance());
+		// System.out.println("---------------");
+		// PrintArray(cam.getPosition());
+		// System.out.println("===============");
 
 	}// END:draw
 
@@ -197,7 +205,7 @@ public class DrawPolygonMap extends PApplet {
 		}
 	}// END: PrintArray
 
-	public void setCam(PeasyCam cam) {
+	private void setCam(PeasyCam cam) {
 		this.cam = cam;
 	}
 
