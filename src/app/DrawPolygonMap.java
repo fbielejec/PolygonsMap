@@ -27,9 +27,7 @@ public class DrawPolygonMap extends PApplet {
 		try {
 
 			size(800, 500, P3D);// 800, 500
-			
-			cam = new PeasyCam(this, 0);
-			
+
 			mapX1 = 30;
 			mapX2 = width - mapX1;
 			mapY1 = 20;
@@ -45,6 +43,8 @@ public class DrawPolygonMap extends PApplet {
 			// calculate min/max latitude
 			minY = getMercatorLatitude(mapdata.getLatMin());
 			maxY = getMercatorLatitude(mapdata.getLatMax());
+
+			cam = new PeasyCam(this, width);
 
 		} catch (ParseException e) {
 			e.printStackTrace();
