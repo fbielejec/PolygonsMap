@@ -33,7 +33,9 @@ ________________________________________________________________________________
                               TODO
 
 * Polygons don't get filled
-* add a "zoom in particular region" ability
+* reassign interfaces:
+ - left mouse drag to pane
+ - middle drag to rotate the camera 
 
 
 

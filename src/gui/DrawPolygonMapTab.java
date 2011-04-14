@@ -13,6 +13,7 @@ import java.io.File;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -38,6 +39,9 @@ public class DrawPolygonMapTab extends JPanel {
 	private JButton generateProcessing;
 	private JButton saveProcessingPlot;
 
+	// Combo boxes
+	private JComboBox projectionParser;
+
 	// Left tools pane
 	private JPanel leftPanel;
 	private JPanel tmpPanel;
@@ -60,6 +64,10 @@ public class DrawPolygonMapTab extends JPanel {
 		generateProcessing = new JButton("Plot");
 		saveProcessingPlot = new JButton("Save");
 
+		// Setup combo boxes
+		String[] stringProjection = { "MERCATOR", "EQUIRECTANGULAR" };
+		projectionParser = new JComboBox(stringProjection);
+
 		// Setup progress bar
 		progressBar = new JProgressBar();
 
@@ -71,12 +79,19 @@ public class DrawPolygonMapTab extends JPanel {
 		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
 		leftPanel.setPreferredSize(new Dimension(leftPanelWidth,
 				leftPanelHeight));
-		leftPanel.setMinimumSize(new Dimension(leftPanelWidth,
-				leftPanelHeight));
+		// leftPanel.setMinimumSize(new Dimension(leftPanelWidth,
+		// leftPanelHeight));
 
 		// Listeners
 		generateProcessing.addActionListener(new ListenGenerateProcessing());
 		saveProcessingPlot.addActionListener(new ListenSaveProcessingPlot());
+
+		tmpPanel = new JPanel();
+		tmpPanel.setMaximumSize(new Dimension(leftPanelWidth + 60, 100));
+		tmpPanel.setBackground(backgroundColor);
+		tmpPanel.setBorder(new TitledBorder("Choose projection:"));
+		tmpPanel.add(projectionParser);
+		leftPanel.add(tmpPanel);
 
 		tmpPanel = new JPanel();
 		tmpPanel.setMaximumSize(new Dimension(leftPanelWidth + 60, 100));
@@ -112,7 +127,8 @@ public class DrawPolygonMapTab extends JPanel {
 		 * Processing pane
 		 * */
 		drawPolygonMap = new DrawPolygonMap();
-		drawPolygonMap.setPreferredSize(new Dimension(dimension.width, dimension.height));//2048, 1025
+		drawPolygonMap.setPreferredSize(new Dimension(dimension.width,
+				dimension.height));// 2048, 1025
 
 		if (System.getProperty("java.runtime.name").toLowerCase().startsWith(
 				"openjdk")) {
@@ -145,6 +161,15 @@ public class DrawPolygonMapTab extends JPanel {
 
 						generateProcessing.setEnabled(false);
 						progressBar.setIndeterminate(true);
+
+						if (projectionParser.getSelectedIndex() == 0) {
+
+							drawPolygonMap.setMercatorProjection();
+
+						} else {
+
+							drawPolygonMap.setEquirrectangularProjection();
+						}
 
 						drawPolygonMap.init();
 

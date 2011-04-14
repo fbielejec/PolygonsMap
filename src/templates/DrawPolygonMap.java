@@ -22,12 +22,22 @@ public class DrawPolygonMap extends PApplet {
 	private float minX, maxX;
 	// min/max latitude
 	private float minY, maxY;
-	// Border of where the map should be drawn on screen
+	// Borders of where the map should be drawn on screen
 	private float mapX1, mapX2;
 	private float mapY1, mapY2;
 
-	public static void main(String args[]) {
-		PApplet.main(new String[] { "templates.DrawPolygonMap" });
+	private enum MapProjection {
+		MERCATOR, EQUIRECTANGULAR
+	}
+
+	private MapProjection mapProjection;
+
+	public void setEquirrectangularProjection() {
+		mapProjection = MapProjection.EQUIRECTANGULAR;
+	}
+
+	public void setMercatorProjection() {
+		mapProjection = MapProjection.MERCATOR;
 	}
 
 	public void setup() {
@@ -38,10 +48,10 @@ public class DrawPolygonMap extends PApplet {
 			width = dimension.width;
 			height = dimension.height;
 
-			size(width, height, P3D);// 800, 500
+			size(width, height, P3D);
 			setCam(new PeasyCam(this, width / 2, height / 2, 0, 450));
 			cam.setMinimumDistance(100);
-			cam.setMaximumDistance(650);
+			// cam.setMaximumDistance(650);
 
 			mapX1 = 30;
 			mapX2 = width - mapX1;
@@ -62,9 +72,18 @@ public class DrawPolygonMap extends PApplet {
 			// calculate min/max longitude
 			minX = mapdata.getLongMin();
 			maxX = mapdata.getLongMax();
+
 			// calculate min/max latitude
-			minY = getMercatorLatitude(mapdata.getLatMin());
-			maxY = getMercatorLatitude(mapdata.getLatMax());
+			switch (mapProjection) {
+			case EQUIRECTANGULAR:
+				minY = getEquirectangularLatitude(mapdata.getLatMin());
+				maxY = getEquirectangularLatitude(mapdata.getLatMax());
+				break;
+			case MERCATOR:
+				minY = getMercatorLatitude(mapdata.getLatMin());
+				maxY = getMercatorLatitude(mapdata.getLatMax());
+				break;
+			}
 
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -85,7 +104,7 @@ public class DrawPolygonMap extends PApplet {
 
 	}// END:draw
 
-	void drawPlotArea() {
+	private void drawPlotArea() {
 
 		// White background
 		background(255, 255, 255);
@@ -97,7 +116,7 @@ public class DrawPolygonMap extends PApplet {
 
 	}// END: drawPlotArea
 
-	void drawMapPolygons() {
+	private void drawMapPolygons() {
 
 		// Dark grey polygon boundaries
 		stroke(105, 105, 105, 255);
@@ -113,27 +132,37 @@ public class DrawPolygonMap extends PApplet {
 
 			region = mapdata.locations[row];
 			nextRegion = mapdata.locations[row + 1];
+			float X = 0, Y = 0, XEND = 0, YEND = 0;
 
 			beginShape();
 
 			if (nextRegion.toLowerCase().equals(region.toLowerCase())) {
 
-				float X = map(mapdata.getFloat(row, 0), minX, maxX, mapX1,
+				X = map(mapdata.getFloat(row, 0), minX, maxX, mapX1, mapX2);
+				XEND = map(mapdata.getFloat(row + 1, 0), minX, maxX, mapX1,
 						mapX2);
-				float Y = map(getMercatorLatitude(mapdata.getFloat(row, 1)),
-						minY, maxY, mapY2, mapY1);
 
-				float XEND = map(mapdata.getFloat(row + 1, 0), minX, maxX,
-						mapX1, mapX2);
-				float YEND = map(getMercatorLatitude(mapdata.getFloat(row + 1,
-						1)), minY, maxY, mapY2, mapY1);
+				switch (mapProjection) {
+				case EQUIRECTANGULAR:
+					Y = map(
+							getEquirectangularLatitude(mapdata.getFloat(row, 1)),
+							minY, maxY, mapY2, mapY1);
+					YEND = map(getEquirectangularLatitude(mapdata.getFloat(
+							row + 1, 1)), minY, maxY, mapY2, mapY1);
+					break;
+				case MERCATOR:
+					Y = map(getMercatorLatitude(mapdata.getFloat(row, 1)),
+							minY, maxY, mapY2, mapY1);
+					YEND = map(
+							getMercatorLatitude(mapdata.getFloat(row + 1, 1)),
+							minY, maxY, mapY2, mapY1);
+					break;
+
+				}
 
 				vertex(X, Y);
 				vertex(XEND, YEND);
-				// vertex(X, YEND);
-				// vertex(Y, XEND);
-				// vertex(X, XEND);
-				// vertex(Y, YEND);
+
 			}
 
 			endShape();
@@ -141,7 +170,7 @@ public class DrawPolygonMap extends PApplet {
 		}// END: row loop
 	}// END: drawMapPolygons
 
-	void drawVertGrid() {
+	private void drawVertGrid() {
 
 		int Interval = 100;
 		stroke(255, 255, 255);
@@ -154,7 +183,7 @@ public class DrawPolygonMap extends PApplet {
 		}// END: longitude loop
 	}// END: drawVertGrid
 
-	void drawHorGrid() {
+	private void drawHorGrid() {
 
 		int Interval = 50;
 		stroke(255, 255, 255);
@@ -167,14 +196,14 @@ public class DrawPolygonMap extends PApplet {
 		}// END: latitude loop
 	}// End: drawHorGrid
 
-	void drawOutline() {
+	private void drawOutline() {
 		noFill();
 		stroke(0, 0, 0);
 		rectMode(CORNERS);
 		rect(mapX1, mapY1, mapX2, mapY2);
 	}// END: drawOutline
 
-	private static float getMercatorLatitude(double lat) {
+	private float getMercatorLatitude(double lat) {
 
 		double R_MAJOR = 6378137.0;
 		double R_MINOR = 6356752.3142;
@@ -197,6 +226,12 @@ public class DrawPolygonMap extends PApplet {
 		double y = 0 - R_MAJOR * Math.log(ts);
 
 		return (float) y;
+	}
+
+	private float getEquirectangularLatitude(double lat) {
+		// double y = map((float) lat, maxY, minY, 0, height);
+		// return (float) y;
+		return (float) (lat - 90.0);
 	}
 
 	private void setCam(PeasyCam cam) {
