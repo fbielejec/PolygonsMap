@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.ScrollPane;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -28,6 +29,7 @@ public class DrawPolygonMapTab extends JPanel {
 	// Sizing constants
 	private final int leftPanelWidth = 200;
 	private final int leftPanelHeight = 1050;
+	private Dimension dimension;
 
 	// Colors
 	private Color backgroundColor;
@@ -52,6 +54,7 @@ public class DrawPolygonMapTab extends JPanel {
 		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		backgroundColor = new Color(231, 237, 246);
 		GridBagConstraints c = new GridBagConstraints();
+		dimension = Toolkit.getDefaultToolkit().getScreenSize();
 
 		// Setup buttons
 		generateProcessing = new JButton("Plot");
@@ -67,6 +70,8 @@ public class DrawPolygonMapTab extends JPanel {
 		leftPanel.setBackground(backgroundColor);
 		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
 		leftPanel.setPreferredSize(new Dimension(leftPanelWidth,
+				leftPanelHeight));
+		leftPanel.setMinimumSize(new Dimension(leftPanelWidth,
 				leftPanelHeight));
 
 		// Listeners
@@ -107,7 +112,7 @@ public class DrawPolygonMapTab extends JPanel {
 		 * Processing pane
 		 * */
 		drawPolygonMap = new DrawPolygonMap();
-		drawPolygonMap.setPreferredSize(new Dimension(2048, 1025));
+		drawPolygonMap.setPreferredSize(new Dimension(dimension.width, dimension.height));//2048, 1025
 
 		if (System.getProperty("java.runtime.name").toLowerCase().startsWith(
 				"openjdk")) {

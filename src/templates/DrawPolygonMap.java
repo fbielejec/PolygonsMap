@@ -1,5 +1,7 @@
 package templates;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.text.ParseException;
 
 import utils.ReadLocations;
@@ -13,24 +15,30 @@ public class DrawPolygonMap extends PApplet {
 	private final boolean fromJar = false;
 
 	private PeasyCam cam;
-	private static ReadLocations mapdata;
+	private ReadLocations mapdata;
+	private Dimension dimension;
+
 	// min/max longitude
-	private static float minX, maxX;
+	private float minX, maxX;
 	// min/max latitude
-	private static float minY, maxY;
+	private float minY, maxY;
 	// Border of where the map should be drawn on screen
-	private static float mapX1, mapX2;
-	private static float mapY1, mapY2;
+	private float mapX1, mapX2;
+	private float mapY1, mapY2;
 
 	public static void main(String args[]) {
-		PApplet.main(new String[] { "app.DrawPolygonMap" });
+		PApplet.main(new String[] { "templates.DrawPolygonMap" });
 	}
 
 	public void setup() {
 
 		try {
 
-			size(800, 500, P3D);// 800, 500
+			dimension = Toolkit.getDefaultToolkit().getScreenSize();
+			width = dimension.width;
+			height = dimension.height;
+
+			size(width, height, P3D);// 800, 500
 			setCam(new PeasyCam(this, width / 2, height / 2, 0, 450));
 			// cam.setMinimumDistance(100);
 			// cam.setMaximumDistance(500);
@@ -206,6 +214,10 @@ public class DrawPolygonMap extends PApplet {
 			System.out.println(x[i]);
 		}
 	}// END: PrintArray
+
+	public String sketchRenderer() {
+		return P3D;
+	}
 
 	private void setCam(PeasyCam cam) {
 		this.cam = cam;
