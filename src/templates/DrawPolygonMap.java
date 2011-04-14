@@ -134,7 +134,7 @@ public class DrawPolygonMap extends PApplet {
 			nextRegion = mapdata.locations[row + 1];
 			float X = 0, Y = 0, XEND = 0, YEND = 0;
 
-			beginShape();
+			beginShape(POLYGON);
 
 			if (nextRegion.toLowerCase().equals(region.toLowerCase())) {
 
@@ -164,8 +164,7 @@ public class DrawPolygonMap extends PApplet {
 				vertex(XEND, YEND);
 
 			}
-
-			endShape();
+			endShape(CLOSE);
 
 		}// END: row loop
 	}// END: drawMapPolygons

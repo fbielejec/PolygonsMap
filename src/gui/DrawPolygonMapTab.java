@@ -173,8 +173,6 @@ public class DrawPolygonMapTab extends JPanel {
 
 						drawPolygonMap.init();
 
-						System.out.println("Finished. \n");
-
 					} catch (Exception e) {
 
 						e.printStackTrace();
