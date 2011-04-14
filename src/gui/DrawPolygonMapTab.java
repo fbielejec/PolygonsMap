@@ -3,6 +3,8 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -49,11 +51,12 @@ public class DrawPolygonMapTab extends JPanel {
 		// Setup miscallenous
 		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		backgroundColor = new Color(231, 237, 246);
+		GridBagConstraints c = new GridBagConstraints();
 
 		// Setup buttons
 		generateProcessing = new JButton("Plot");
 		saveProcessingPlot = new JButton("Save");
-		
+
 		// Setup progress bar
 		progressBar = new JProgressBar();
 
@@ -72,10 +75,18 @@ public class DrawPolygonMapTab extends JPanel {
 
 		tmpPanel = new JPanel();
 		tmpPanel.setMaximumSize(new Dimension(leftPanelWidth + 60, 100));
+		tmpPanel.setLayout(new GridBagLayout());
 		tmpPanel.setBackground(backgroundColor);
 		tmpPanel.setBorder(new TitledBorder("Plot map:"));
-		tmpPanel.add(generateProcessing);
-		tmpPanel.add(progressBar);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 2;
+		c.gridy = 0;
+		tmpPanel.add(generateProcessing, c);
+		c.ipady = 7;
+		c.gridwidth = 3;
+		c.gridx = 0;
+		c.gridy = 1;
+		tmpPanel.add(progressBar, c);
 		leftPanel.add(tmpPanel);
 
 		tmpPanel = new JPanel();
