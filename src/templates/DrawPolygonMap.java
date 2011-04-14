@@ -40,8 +40,8 @@ public class DrawPolygonMap extends PApplet {
 
 			size(width, height, P3D);// 800, 500
 			setCam(new PeasyCam(this, width / 2, height / 2, 0, 450));
-			// cam.setMinimumDistance(100);
-			// cam.setMaximumDistance(500);
+			cam.setMinimumDistance(100);
+			cam.setMaximumDistance(650);
 
 			mapX1 = 30;
 			mapX2 = width - mapX1;
@@ -88,7 +88,7 @@ public class DrawPolygonMap extends PApplet {
 		// System.out.println(width);
 		// System.out.println(height);
 
-		// System.out.println(cam.getDistance());
+		System.out.println(cam.getDistance());
 		// System.out.println("---------------");
 		// PrintArray(cam.getPosition());
 		// System.out.println("===============");
@@ -221,6 +221,7 @@ public class DrawPolygonMap extends PApplet {
 
 	private void setCam(PeasyCam cam) {
 		this.cam = cam;
+
 	}
 
 	public PeasyCam getCam() {
