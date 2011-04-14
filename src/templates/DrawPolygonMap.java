@@ -81,17 +81,7 @@ public class DrawPolygonMap extends PApplet {
 		drawMapPolygons();
 		drawOutline();
 
-		// System.out.println(mapX1);
-		// System.out.println(mapX2);
-		// System.out.println(mapY1);
-		// System.out.println(mapY2);
-		// System.out.println(width);
-		// System.out.println(height);
-
-		System.out.println(cam.getDistance());
-		// System.out.println("---------------");
-		// PrintArray(cam.getPosition());
-		// System.out.println("===============");
+		// System.out.println(cam.getDistance());
 
 	}// END:draw
 
@@ -207,16 +197,6 @@ public class DrawPolygonMap extends PApplet {
 		double y = 0 - R_MAJOR * Math.log(ts);
 
 		return (float) y;
-	}
-
-	public void PrintArray(float[] x) {
-		for (int i = 0; i < x.length; i++) {
-			System.out.println(x[i]);
-		}
-	}// END: PrintArray
-
-	public String sketchRenderer() {
-		return P3D;
 	}
 
 	private void setCam(PeasyCam cam) {
