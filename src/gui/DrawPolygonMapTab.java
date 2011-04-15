@@ -162,12 +162,11 @@ public class DrawPolygonMapTab extends JPanel {
 						generateProcessing.setEnabled(false);
 						progressBar.setIndeterminate(true);
 
+//						drawPolygonMap.setCam(drawPolygonMap.getCam());
+						
 						if (projectionParser.getSelectedIndex() == 0) {
-
 							drawPolygonMap.setMercatorProjection();
-
 						} else {
-
 							drawPolygonMap.setEquirrectangularProjection();
 						}
 

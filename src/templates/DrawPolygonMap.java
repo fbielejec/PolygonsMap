@@ -66,18 +66,6 @@ public class DrawPolygonMap extends PApplet {
 			minX = mapdata.getLongMin();
 			maxX = mapdata.getLongMax();
 
-//			// calculate min/max latitude
-//			switch (mapProjection) {
-//			case EQUIRECTANGULAR:
-//				minY = getEquirectangularLatitude(mapdata.getLatMin());
-//				maxY = getEquirectangularLatitude(mapdata.getLatMax());
-//				break;
-//			case MERCATOR:
-//				minY = getMercatorLatitude(mapdata.getLatMin());
-//				maxY = getMercatorLatitude(mapdata.getLatMax());
-//				break;
-//			}
-
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -122,7 +110,7 @@ public class DrawPolygonMap extends PApplet {
 			maxY = getMercatorLatitude(mapdata.getLatMax());
 			break;
 		}
-		
+
 		// Dark grey polygon boundaries
 		stroke(105, 105, 105, 255);
 		strokeWeight(1);

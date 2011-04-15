@@ -32,10 +32,10 @@ PeasyCam.jar
 ________________________________________________________________________________
                               TODO
 
-* Polygons don't get filled
-* reassign interfaces:
+* Polygons don't get filled (!!!)
+* Reassign interfaces:
  - left mouse drag to pane
  - middle drag to rotate the camera 
-
+* Camera is not re-set when changing projections
 
 
