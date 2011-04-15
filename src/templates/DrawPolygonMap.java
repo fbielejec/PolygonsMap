@@ -62,10 +62,6 @@ public class DrawPolygonMap extends PApplet {
 			mapdata = new ReadLocations(LoadMapData(new Setter()
 					.getJarBoolean()));
 
-			// calculate min/max longitude
-			minX = mapdata.getLongMin();
-			maxX = mapdata.getLongMax();
-
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -99,13 +95,20 @@ public class DrawPolygonMap extends PApplet {
 
 	private void drawMapPolygons() {
 
-		// calculate min/max latitude
 		switch (mapProjection) {
 		case EQUIRECTANGULAR:
-			minY = getEquirectangularLatitude(mapdata.getLatMin());
-			maxY = getEquirectangularLatitude(mapdata.getLatMax());
+			// calculate min/max longitude
+			minX = (mapdata.getLongMin());
+			maxX = (mapdata.getLongMax());
+			// calculate min/max latitude
+			minY = (mapdata.getLatMin());
+			maxY = (mapdata.getLatMax());
 			break;
 		case MERCATOR:
+			// calculate min/max longitude
+			minX = mapdata.getLongMin();
+			maxX = mapdata.getLongMax();
+			// calculate min/max latitude
 			minY = getMercatorLatitude(mapdata.getLatMin());
 			maxY = getMercatorLatitude(mapdata.getLatMax());
 			break;
@@ -131,19 +134,32 @@ public class DrawPolygonMap extends PApplet {
 
 			if (nextRegion.toLowerCase().equals(region.toLowerCase())) {
 
-				X = map(mapdata.getFloat(row, 0), minX, maxX, mapX1, mapX2);
-				XEND = map(mapdata.getFloat(row + 1, 0), minX, maxX, mapX1,
-						mapX2);
-
 				switch (mapProjection) {
 				case EQUIRECTANGULAR:
-					Y = map(
-							getEquirectangularLatitude(mapdata.getFloat(row, 1)),
-							minY, maxY, mapY2, mapY1);
-					YEND = map(getEquirectangularLatitude(mapdata.getFloat(
-							row + 1, 1)), minY, maxY, mapY2, mapY1);
+
+					// longitude
+					X = map((mapdata.getFloat(row, 0)), minX, maxX, mapX1,
+							mapX2);
+
+					XEND = map((mapdata.getFloat(row + 1, 0)), minX, maxX,
+							mapX1, mapX2);
+
+					// latitude
+					Y = map((mapdata.getFloat(row, 1)), minY, maxY, mapY2,
+							mapY1);
+					YEND = map((mapdata.getFloat(row + 1, 1)), minY, maxY,
+							mapY2, mapY1);
 					break;
+
 				case MERCATOR:
+
+					// longitude
+					X = map(mapdata.getFloat(row, 0), minX, maxX, mapX1, mapX2);
+
+					XEND = map(mapdata.getFloat(row + 1, 0), minX, maxX, mapX1,
+							mapX2);
+
+					// latitude
 					Y = map(getMercatorLatitude(mapdata.getFloat(row, 1)),
 							minY, maxY, mapY2, mapY1);
 					YEND = map(
@@ -220,13 +236,8 @@ public class DrawPolygonMap extends PApplet {
 		return (float) y;
 	}
 
-	private float getEquirectangularLatitude(double lat) {
-		return (float) (lat - 90.0);
-	}
-
 	private void setCam(PeasyCam cam) {
 		this.cam = cam;
-
 	}
 
 	public PeasyCam getCam() {
