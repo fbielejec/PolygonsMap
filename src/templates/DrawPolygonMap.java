@@ -42,29 +42,19 @@ public class DrawPolygonMap extends PApplet {
 
 	public void setup() {
 
-		try {
+		dimension = Toolkit.getDefaultToolkit().getScreenSize();
+		width = dimension.width;
+		height = dimension.height;
 
-			dimension = Toolkit.getDefaultToolkit().getScreenSize();
-			width = dimension.width;
-			height = dimension.height;
+		size(width, height, P3D);
+		setCam(new PeasyCam(this, width / 2, height / 2, 0, 450));
+		cam.setMinimumDistance(100);
+		// cam.setMaximumDistance(650);
 
-			size(width, height, P3D);
-			setCam(new PeasyCam(this, width / 2, height / 2, 0, 450));
-			cam.setMinimumDistance(100);
-			// cam.setMaximumDistance(650);
-
-			mapX1 = 30;
-			mapX2 = width - mapX1;
-			mapY1 = 20;
-			mapY2 = height - mapY1;
-
-			// load the map data
-			mapdata = new ReadLocations(LoadMapData(new Setter()
-					.getJarBoolean()));
-
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+		mapX1 = 30;
+		mapX2 = width - mapX1;
+		mapY1 = 20;
+		mapY2 = height - mapY1;
 
 	}// END:setup
 
@@ -95,87 +85,99 @@ public class DrawPolygonMap extends PApplet {
 
 	private void drawMapPolygons() {
 
-		switch (mapProjection) {
-		case EQUIRECTANGULAR:
-			// calculate min/max longitude
-			minX = (mapdata.getLongMin());
-			maxX = (mapdata.getLongMax());
-			// calculate min/max latitude
-			minY = (mapdata.getLatMin());
-			maxY = (mapdata.getLatMax());
-			break;
-		case MERCATOR:
-			// calculate min/max longitude
-			minX = mapdata.getLongMin();
-			maxX = mapdata.getLongMax();
-			// calculate min/max latitude
-			minY = getMercatorLatitude(mapdata.getLatMin());
-			maxY = getMercatorLatitude(mapdata.getLatMax());
-			break;
-		}
+		try {
 
-		// Dark grey polygon boundaries
-		stroke(105, 105, 105, 255);
-		strokeWeight(1);
-		// Sand brown polygon filling
-		fill(244, 164, 96, 255);
+			// load the map data
+			mapdata = new ReadLocations(LoadMapData(new Setter()
+					.getJarBoolean()));
 
-		int rowCount = mapdata.nrow;
-		String region;
-		String nextRegion;
+			switch (mapProjection) {
+			case EQUIRECTANGULAR:
+				// calculate min/max longitude
+				minX = (mapdata.getLongMin());
+				maxX = (mapdata.getLongMax());
+				// calculate min/max latitude
+				minY = (mapdata.getLatMin());
+				maxY = (mapdata.getLatMax());
+				break;
+			case MERCATOR:
+				// calculate min/max longitude
+				minX = mapdata.getLongMin();
+				maxX = mapdata.getLongMax();
+				// calculate min/max latitude
+				minY = getMercatorLatitude(mapdata.getLatMin());
+				maxY = getMercatorLatitude(mapdata.getLatMax());
+				break;
+			}
 
-		for (int row = 0; row < rowCount - 1; row++) {
+			// Dark grey polygon boundaries
+			stroke(105, 105, 105, 255);
+			strokeWeight(1);
+			// Sand brown polygon filling
+			fill(244, 164, 96, 255);
 
-			region = mapdata.locations[row];
-			nextRegion = mapdata.locations[row + 1];
-			float X = 0, Y = 0, XEND = 0, YEND = 0;
+			int rowCount = mapdata.nrow;
+			String region;
+			String nextRegion;
 
-			beginShape(POLYGON);
+			for (int row = 0; row < rowCount - 1; row++) {
 
-			if (nextRegion.toLowerCase().equals(region.toLowerCase())) {
+				region = mapdata.locations[row];
+				nextRegion = mapdata.locations[row + 1];
+				float X = 0, Y = 0, XEND = 0, YEND = 0;
 
-				switch (mapProjection) {
-				case EQUIRECTANGULAR:
+				beginShape(POLYGON);
 
-					// longitude
-					X = map((mapdata.getFloat(row, 0)), minX, maxX, mapX1,
-							mapX2);
+				if (region.toLowerCase().equals(nextRegion.toLowerCase())) {
 
-					XEND = map((mapdata.getFloat(row + 1, 0)), minX, maxX,
-							mapX1, mapX2);
+					switch (mapProjection) {
+					case EQUIRECTANGULAR:
 
-					// latitude
-					Y = map((mapdata.getFloat(row, 1)), minY, maxY, mapY2,
-							mapY1);
-					YEND = map((mapdata.getFloat(row + 1, 1)), minY, maxY,
-							mapY2, mapY1);
-					break;
+						// longitude
+						X = map((mapdata.getFloat(row, 0)), minX, maxX, mapX1,
+								mapX2);
 
-				case MERCATOR:
+						XEND = map((mapdata.getFloat(row + 1, 0)), minX, maxX,
+								mapX1, mapX2);
 
-					// longitude
-					X = map(mapdata.getFloat(row, 0), minX, maxX, mapX1, mapX2);
+						// latitude
+						Y = map((mapdata.getFloat(row, 1)), minY, maxY, mapY2,
+								mapY1);
+						YEND = map((mapdata.getFloat(row + 1, 1)), minY, maxY,
+								mapY2, mapY1);
+						break;
 
-					XEND = map(mapdata.getFloat(row + 1, 0), minX, maxX, mapX1,
-							mapX2);
+					case MERCATOR:
 
-					// latitude
-					Y = map(getMercatorLatitude(mapdata.getFloat(row, 1)),
-							minY, maxY, mapY2, mapY1);
-					YEND = map(
-							getMercatorLatitude(mapdata.getFloat(row + 1, 1)),
-							minY, maxY, mapY2, mapY1);
-					break;
+						// longitude
+						X = map(mapdata.getFloat(row, 0), minX, maxX, mapX1,
+								mapX2);
+
+						XEND = map(mapdata.getFloat(row + 1, 0), minX, maxX,
+								mapX1, mapX2);
+
+						// latitude
+						Y = map(getMercatorLatitude(mapdata.getFloat(row, 1)),
+								minY, maxY, mapY2, mapY1);
+
+						YEND = map(getMercatorLatitude(mapdata.getFloat(
+								row + 1, 1)), minY, maxY, mapY2, mapY1);
+						break;
+
+					}
+
+					vertex(X, Y);
+					vertex(XEND, YEND);
 
 				}
+				endShape(CLOSE);
 
-				vertex(X, Y);
-				vertex(XEND, YEND);
+			}// END: row loop
 
-			}
-			endShape(CLOSE);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 
-		}// END: row loop
 	}// END: drawMapPolygons
 
 	private void drawVertGrid() {

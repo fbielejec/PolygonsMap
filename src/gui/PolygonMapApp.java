@@ -47,7 +47,7 @@ public class PolygonMapApp {
 		Toolkit.getDefaultToolkit().setDynamicLayout(true);
 
 		// Setup Main Frame
-		frame = new JFrame("S.P.R.E.A.D.");
+		frame = new JFrame("Polygon Map");
 		frame.getContentPane().setLayout(new BorderLayout());
 		frame.addWindowListener(new ListenCloseWdw());
 
