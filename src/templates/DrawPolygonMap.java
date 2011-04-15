@@ -4,24 +4,24 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.text.ParseException;
 
-import utils.ReadLocations;
-
 import peasy.PeasyCam;
 import processing.core.PApplet;
+import utils.ReadLocations;
+import utils.Setter;
 
 @SuppressWarnings("serial")
 public class DrawPolygonMap extends PApplet {
-
-	private final boolean fromJar = false;
 
 	private PeasyCam cam;
 	private ReadLocations mapdata;
 	private Dimension dimension;
 
+	// Borders of the map coordinates
 	// min/max longitude
 	private float minX, maxX;
 	// min/max latitude
 	private float minY, maxY;
+
 	// Borders of where the map should be drawn on screen
 	private float mapX1, mapX2;
 	private float mapY1, mapY2;
@@ -59,31 +59,24 @@ public class DrawPolygonMap extends PApplet {
 			mapY2 = height - mapY1;
 
 			// load the map data
-			if (fromJar) {
-
-				mapdata = new ReadLocations("jar:"
-						+ getClass().getResource("world_map.txt").getPath());
-			} else {
-
-				mapdata = new ReadLocations(this.getClass().getResource(
-						"world_map.txt").getPath());
-			}
+			mapdata = new ReadLocations(LoadMapData(new Setter()
+					.getJarBoolean()));
 
 			// calculate min/max longitude
 			minX = mapdata.getLongMin();
 			maxX = mapdata.getLongMax();
 
-			// calculate min/max latitude
-			switch (mapProjection) {
-			case EQUIRECTANGULAR:
-				minY = getEquirectangularLatitude(mapdata.getLatMin());
-				maxY = getEquirectangularLatitude(mapdata.getLatMax());
-				break;
-			case MERCATOR:
-				minY = getMercatorLatitude(mapdata.getLatMin());
-				maxY = getMercatorLatitude(mapdata.getLatMax());
-				break;
-			}
+//			// calculate min/max latitude
+//			switch (mapProjection) {
+//			case EQUIRECTANGULAR:
+//				minY = getEquirectangularLatitude(mapdata.getLatMin());
+//				maxY = getEquirectangularLatitude(mapdata.getLatMax());
+//				break;
+//			case MERCATOR:
+//				minY = getMercatorLatitude(mapdata.getLatMin());
+//				maxY = getMercatorLatitude(mapdata.getLatMax());
+//				break;
+//			}
 
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -118,6 +111,18 @@ public class DrawPolygonMap extends PApplet {
 
 	private void drawMapPolygons() {
 
+		// calculate min/max latitude
+		switch (mapProjection) {
+		case EQUIRECTANGULAR:
+			minY = getEquirectangularLatitude(mapdata.getLatMin());
+			maxY = getEquirectangularLatitude(mapdata.getLatMax());
+			break;
+		case MERCATOR:
+			minY = getMercatorLatitude(mapdata.getLatMin());
+			maxY = getMercatorLatitude(mapdata.getLatMax());
+			break;
+		}
+		
 		// Dark grey polygon boundaries
 		stroke(105, 105, 105, 255);
 		strokeWeight(1);
@@ -228,8 +233,6 @@ public class DrawPolygonMap extends PApplet {
 	}
 
 	private float getEquirectangularLatitude(double lat) {
-		// double y = map((float) lat, maxY, minY, 0, height);
-		// return (float) y;
 		return (float) (lat - 90.0);
 	}
 
@@ -240,6 +243,20 @@ public class DrawPolygonMap extends PApplet {
 
 	public PeasyCam getCam() {
 		return cam;
+	}
+
+	private String LoadMapData(boolean fromJar) {
+
+		String imgPath;
+
+		if (fromJar) {
+			imgPath = "jar:"
+					+ this.getClass().getResource("world_map.txt").getPath();
+		} else {
+			imgPath = this.getClass().getResource("world_map.txt").getPath();
+		}
+
+		return imgPath;
 	}
 
 }// END: PlotOnMap class
