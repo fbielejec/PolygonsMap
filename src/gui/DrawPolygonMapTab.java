@@ -29,7 +29,7 @@ public class DrawPolygonMapTab extends JPanel {
 
 	// Sizing constants
 	private final int leftPanelWidth = 200;
-	private final int leftPanelHeight = 1050;
+	private final int leftPanelHeight = 300;
 	private Dimension dimension;
 
 	// Colors
@@ -64,6 +64,10 @@ public class DrawPolygonMapTab extends JPanel {
 		generateProcessing = new JButton("Plot");
 		saveProcessingPlot = new JButton("Save");
 
+		// Listeners
+		generateProcessing.addActionListener(new ListenGenerateProcessing());
+		saveProcessingPlot.addActionListener(new ListenSaveProcessingPlot());
+
 		// Setup combo boxes
 		String[] stringProjection = { "MERCATOR", "EQUIRECTANGULAR" };
 		projectionParser = new JComboBox(stringProjection);
@@ -82,10 +86,6 @@ public class DrawPolygonMapTab extends JPanel {
 		// leftPanel.setMinimumSize(new Dimension(leftPanelWidth,
 		// leftPanelHeight));
 
-		// Listeners
-		generateProcessing.addActionListener(new ListenGenerateProcessing());
-		saveProcessingPlot.addActionListener(new ListenSaveProcessingPlot());
-
 		tmpPanel = new JPanel();
 		tmpPanel.setMaximumSize(new Dimension(leftPanelWidth + 60, 100));
 		tmpPanel.setBackground(backgroundColor);
@@ -93,6 +93,7 @@ public class DrawPolygonMapTab extends JPanel {
 		tmpPanel.add(projectionParser);
 		leftPanel.add(tmpPanel);
 
+		// TODO: more info panel in work
 		tmpPanel = new JPanel();
 		tmpPanel.setMaximumSize(new Dimension(leftPanelWidth + 60, 100));
 		tmpPanel.setLayout(new GridBagLayout());
@@ -107,7 +108,9 @@ public class DrawPolygonMapTab extends JPanel {
 		c.gridx = 0;
 		c.gridy = 1;
 		tmpPanel.add(progressBar, c);
-		leftPanel.add(tmpPanel);
+		MoreInfoPanel mip = new MoreInfoPanel(tmpPanel);
+		mip.showBottom(true);
+		leftPanel.add(mip);
 
 		tmpPanel = new JPanel();
 		tmpPanel.setMaximumSize(new Dimension(leftPanelWidth + 60, 100));
@@ -162,8 +165,8 @@ public class DrawPolygonMapTab extends JPanel {
 						generateProcessing.setEnabled(false);
 						progressBar.setIndeterminate(true);
 
-//						drawPolygonMap.setCam(drawPolygonMap.getCam());
-						
+						// drawPolygonMap.setCam(drawPolygonMap.getCam());
+
 						if (projectionParser.getSelectedIndex() == 0) {
 							drawPolygonMap.setMercatorProjection();
 						} else {

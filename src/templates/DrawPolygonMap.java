@@ -126,7 +126,7 @@ public class DrawPolygonMap extends PApplet {
 				nextRegion = mapdata.locations[row + 1];
 				float X = 0, Y = 0, XEND = 0, YEND = 0;
 
-				beginShape(POLYGON);
+				beginShape();
 
 				if (region.toLowerCase().equals(nextRegion.toLowerCase())) {
 
