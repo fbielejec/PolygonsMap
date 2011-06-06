@@ -24,12 +24,14 @@ public class SpinningPanel extends JPanel {
 
 	protected SpinWidget spinWidget;
 	public Component bottomComponent;
+	public String label;
 
 	public static final int SPIN_WIDGET_HEIGHT = 10;
 
-	public SpinningPanel(Component bc) {
+	public SpinningPanel(Component bottomComponent, String label) {
 		spinWidget = new SpinWidget();
-		bottomComponent = bc;
+		this.bottomComponent = bottomComponent;
+		this.label = label;
 		doMyLayout();
 	}
 
@@ -37,14 +39,13 @@ public class SpinningPanel extends JPanel {
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		JPanel labelPanel = new JPanel();
-		labelPanel.setBackground(new Color(185, 195, 210));
+		GradientPanel labelPanel = new GradientPanel(new Color(185, 195, 210), Color.WHITE);
 		labelPanel.setMaximumSize(new Dimension(leftPanelWidth + 60, 30));
 
-		JLabel label = new JLabel("Plotting");
-		label.setHorizontalTextPosition(JLabel.CENTER);
+		JLabel jlabel = new JLabel(label);
+		jlabel.setHorizontalTextPosition(JLabel.CENTER);
 		labelPanel.add(spinWidget);
-		labelPanel.add(label);
+		labelPanel.add(jlabel);
 		labelPanel.setBorder(BorderFactory.createLineBorder(new Color(154, 164,
 				183)));
 		add(labelPanel);
