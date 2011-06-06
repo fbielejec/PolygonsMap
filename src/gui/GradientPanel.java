@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 public class GradientPanel extends JPanel {
 
 	private Color startColor;
-
 	private Color endColor;
 
 	public GradientPanel() {
@@ -24,7 +23,7 @@ public class GradientPanel extends JPanel {
 		this.endColor = endColor;
 	}
 
-	@Override
+	// @Override
 	protected void paintComponent(Graphics g) {
 
 		super.paintComponent(g);
