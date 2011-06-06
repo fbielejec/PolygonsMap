@@ -1,9 +1,11 @@
 package gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
 import java.awt.Polygon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -17,10 +19,9 @@ import javax.swing.JPanel;
 public class SpinningPanel extends JPanel {
 
 	private Dimension dimension;
+	private Component bottomComponent;
+	private String label;
 	private SpinWidget spinWidget;
-
-	public Component bottomComponent;
-	public String label;
 
 	public SpinningPanel(Component bottomComponent, String label,
 			Dimension dimension) {
@@ -35,17 +36,24 @@ public class SpinningPanel extends JPanel {
 	protected void doMyLayout() {
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		GridBagConstraints c = new GridBagConstraints();
 
 		GradientPanel labelPanel = new GradientPanel(new Color(185, 195, 210),
 				Color.WHITE);
 		labelPanel.setMaximumSize(dimension);
+		labelPanel.setLayout(new BorderLayout());
 
 		spinWidget = new SpinWidget();
-		labelPanel.add(spinWidget);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridwidth = 3;
+		c.gridx = 0;
+		c.gridy = 0;
+		labelPanel.add(spinWidget, BorderLayout.LINE_START);
 
 		JLabel jlabel = new JLabel(label);
-		jlabel.setHorizontalTextPosition(JLabel.CENTER);
-		labelPanel.add(jlabel);
+		jlabel.setHorizontalTextPosition(JLabel.LEADING);
+//		jlabel.setVerticalTextPosition(JLabel.CENTER);
+		labelPanel.add(jlabel, BorderLayout.CENTER);
 
 		labelPanel.setBorder(BorderFactory.createLineBorder(new Color(154, 164,
 				183)));

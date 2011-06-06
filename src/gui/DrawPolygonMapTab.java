@@ -108,8 +108,8 @@ public class DrawPolygonMapTab extends JPanel {
 		c.gridx = 0;
 		c.gridy = 1;
 		tmpPanel.add(progressBar, c);
-		SpinningPanel sp = new SpinningPanel(tmpPanel, "Plotting",
-				new Dimension(leftPanelWidth + 60, 30));
+		SpinningPanel sp = new SpinningPanel(tmpPanel, "   Plotting",
+				new Dimension(leftPanelWidth + 60, 20));
 		sp.showBottom(true);
 		leftPanel.add(sp);
 
