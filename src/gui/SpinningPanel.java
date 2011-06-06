@@ -16,19 +16,20 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class SpinningPanel extends JPanel {
 
-	// Sizing constants
-	private final int leftPanelWidth = 200;
+	private Dimension dimension;
+	private SpinWidget spinWidget;
 
-	protected SpinWidget spinWidget;
 	public Component bottomComponent;
 	public String label;
 
-	public static final int SPIN_WIDGET_HEIGHT = 10;
+	public SpinningPanel(Component bottomComponent, String label,
+			Dimension dimension) {
 
-	public SpinningPanel(Component bottomComponent, String label) {
 		this.bottomComponent = bottomComponent;
 		this.label = label;
+		this.dimension = dimension;
 		doMyLayout();
+
 	}
 
 	protected void doMyLayout() {
@@ -37,7 +38,7 @@ public class SpinningPanel extends JPanel {
 
 		GradientPanel labelPanel = new GradientPanel(new Color(185, 195, 210),
 				Color.WHITE);
-		labelPanel.setMaximumSize(new Dimension(leftPanelWidth + 60, 30));
+		labelPanel.setMaximumSize(dimension);
 
 		spinWidget = new SpinWidget();
 		labelPanel.add(spinWidget);
@@ -72,7 +73,7 @@ public class SpinningPanel extends JPanel {
 
 	public class SpinWidget extends JPanel {
 
-		private static final int SPIN_WIDGET_HEIGHT = 15;
+		private int SPIN_WIDGET_HEIGHT = 15;
 		private Dimension mySize = new Dimension(SPIN_WIDGET_HEIGHT,
 				SPIN_WIDGET_HEIGHT);
 		private boolean open;
