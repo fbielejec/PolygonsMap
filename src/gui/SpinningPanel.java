@@ -52,7 +52,8 @@ public class SpinningPanel extends JPanel {
 
 		add(bottomComponent);
 		resetBottomVisibility();
-	}
+
+	}// END: doMyLayout
 
 	private void resetBottomVisibility() {
 		if ((bottomComponent == null) || (spinWidget == null))
@@ -117,7 +118,6 @@ public class SpinningPanel extends JPanel {
 			return mySize;
 		}
 
-		// don't override update( ), get the default clear
 		public void paint(Graphics g) {
 
 			g.setColor(new Color(100, 104, 111));
