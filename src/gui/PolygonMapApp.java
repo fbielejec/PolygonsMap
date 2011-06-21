@@ -26,7 +26,7 @@ public class PolygonMapApp {
 
 	// Frame
 	private JFrame frame;
-	private JTabbedPane tabbedPane;
+	private DnDTabbedPane tabbedPane;
 
 	// Menubar
 	private JMenuBar mainMenu;
@@ -68,7 +68,7 @@ public class PolygonMapApp {
 		mainMenu.add(buttonsHolder, BorderLayout.EAST);
 
 		// Setup Tabbed Pane
-		tabbedPane = new JTabbedPane();
+		tabbedPane = new DnDTabbedPane();
 
 		// add DrawPolygonMap
 		drawPolygonMapTab = new DrawPolygonMapTab();

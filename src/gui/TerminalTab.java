@@ -44,7 +44,7 @@ public class TerminalTab extends JPanel {
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		add(scrollPane);
 
-		// Setup Drag&Drop
+		// Setup Drag & Drop
 		DragSource ds = DragSource.getDefaultDragSource();
 		DragGestureRecognizer dgr = ds.createDefaultDragGestureRecognizer(
 				label, DnDConstants.ACTION_MOVE, new FileDragGestureListener(
