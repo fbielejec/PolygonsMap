@@ -45,6 +45,8 @@ public class DrawPolygonMapTab extends JPanel {
 	// Left tools pane
 	private JPanel leftPanel;
 	private JPanel tmpPanel;
+	private SpinningPanel sp;
+	private JPanel tmpPanelsHolder;
 
 	// Processing pane
 	private DrawPolygonMap drawPolygonMap;
@@ -83,17 +85,22 @@ public class DrawPolygonMapTab extends JPanel {
 		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
 		leftPanel.setPreferredSize(new Dimension(leftPanelWidth,
 				leftPanelHeight));
-		// leftPanel.setMinimumSize(new Dimension(leftPanelWidth,
-		// leftPanelHeight));
+
+		// /////////////
+		// ---INPUT---//
+		// /////////////
+
+		tmpPanelsHolder = new JPanel();
+		tmpPanelsHolder.setLayout(new BoxLayout(tmpPanelsHolder,
+				BoxLayout.Y_AXIS));
 
 		tmpPanel = new JPanel();
 		tmpPanel.setMaximumSize(new Dimension(leftPanelWidth + 60, 100));
 		tmpPanel.setBackground(backgroundColor);
 		tmpPanel.setBorder(new TitledBorder("Choose projection:"));
 		tmpPanel.add(projectionParser);
-		leftPanel.add(tmpPanel);
+		tmpPanelsHolder.add(tmpPanel);
 
-		// TODO: more info panel in work
 		tmpPanel = new JPanel();
 		tmpPanel.setMaximumSize(new Dimension(leftPanelWidth + 60, 100));
 		tmpPanel.setLayout(new GridBagLayout());
@@ -108,17 +115,36 @@ public class DrawPolygonMapTab extends JPanel {
 		c.gridx = 0;
 		c.gridy = 1;
 		tmpPanel.add(progressBar, c);
-		SpinningPanel sp = new SpinningPanel(tmpPanel, "   Plotting",
-				new Dimension(leftPanelWidth + 60, 20));
+		tmpPanelsHolder.add(tmpPanel);
+
+		sp = new SpinningPanel(tmpPanelsHolder, "   Plotting", new Dimension(
+				leftPanelWidth + 60, 20));
 		sp.showBottom(true);
 		leftPanel.add(sp);
+
+		// //////////////
+		// ---OUTPUT---//
+		// //////////////
+
+		tmpPanelsHolder = new JPanel();
+		tmpPanelsHolder.setLayout(new BoxLayout(tmpPanelsHolder,
+				BoxLayout.Y_AXIS));
 
 		tmpPanel = new JPanel();
 		tmpPanel.setMaximumSize(new Dimension(leftPanelWidth + 60, 100));
 		tmpPanel.setBackground(backgroundColor);
 		tmpPanel.setBorder(new TitledBorder("Save plot:"));
 		tmpPanel.add(saveProcessingPlot);
-		leftPanel.add(tmpPanel);
+		tmpPanelsHolder.add(tmpPanel);
+
+		sp = new SpinningPanel(tmpPanelsHolder, "   Output", new Dimension(
+				leftPanelWidth + 60, 20));
+		sp.showBottom(true);
+		leftPanel.add(sp);
+
+		// ////////////////////////
+		// ---LEFT SCROLL PANE---//
+		// ////////////////////////
 
 		JScrollPane leftScrollPane = new JScrollPane(leftPanel,
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,

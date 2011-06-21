@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.GridBagConstraints;
 import java.awt.Polygon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -22,6 +21,10 @@ public class SpinningPanel extends JPanel {
 	private Component bottomComponent;
 	private String label;
 	private SpinWidget spinWidget;
+	private Color gradientPanelStartColor;
+	private Color gradientPanelEndColor;
+	private Color gradientPanelBorderColor;
+	private Color SpinWidgetColor;
 
 	public SpinningPanel(Component bottomComponent, String label,
 			Dimension dimension) {
@@ -29,6 +32,12 @@ public class SpinningPanel extends JPanel {
 		this.bottomComponent = bottomComponent;
 		this.label = label;
 		this.dimension = dimension;
+
+		gradientPanelStartColor = new Color(182, 192, 207);
+		gradientPanelEndColor = new Color(202, 209, 220);
+		gradientPanelBorderColor = new Color(154, 164, 183);
+		SpinWidgetColor = new Color(100, 104, 111);
+
 		doMyLayout();
 
 	}
@@ -36,27 +45,20 @@ public class SpinningPanel extends JPanel {
 	protected void doMyLayout() {
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		GridBagConstraints c = new GridBagConstraints();
 
-		GradientPanel labelPanel = new GradientPanel(new Color(185, 195, 210),
-				Color.WHITE);
+		GradientPanel labelPanel = new GradientPanel(gradientPanelStartColor,
+				gradientPanelEndColor, GradientPanel.VERTICAL);
 		labelPanel.setMaximumSize(dimension);
 		labelPanel.setLayout(new BorderLayout());
 
 		spinWidget = new SpinWidget();
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridwidth = 3;
-		c.gridx = 0;
-		c.gridy = 0;
 		labelPanel.add(spinWidget, BorderLayout.LINE_START);
 
 		JLabel jlabel = new JLabel(label);
-		jlabel.setHorizontalTextPosition(JLabel.LEADING);
-//		jlabel.setVerticalTextPosition(JLabel.CENTER);
 		labelPanel.add(jlabel, BorderLayout.CENTER);
 
-		labelPanel.setBorder(BorderFactory.createLineBorder(new Color(154, 164,
-				183)));
+		labelPanel.setBorder(BorderFactory
+				.createLineBorder(gradientPanelBorderColor));
 		add(labelPanel);
 
 		add(bottomComponent);
@@ -81,17 +83,19 @@ public class SpinningPanel extends JPanel {
 
 	public class SpinWidget extends JPanel {
 
-		private int SPIN_WIDGET_HEIGHT = 15;
+		private final int SPIN_WIDGET_HEIGHT = 15;
+		private final int HALF_HEIGHT = SPIN_WIDGET_HEIGHT / 2;
 		private Dimension mySize = new Dimension(SPIN_WIDGET_HEIGHT,
 				SPIN_WIDGET_HEIGHT);
 		private boolean open;
-		private final int HALF_HEIGHT = SPIN_WIDGET_HEIGHT / 2;
-		private int[] openXPoints = { 1, HALF_HEIGHT, SPIN_WIDGET_HEIGHT - 1 };
 
+		private int[] openXPoints = { 1, HALF_HEIGHT, SPIN_WIDGET_HEIGHT - 1 };
 		private int[] openYPoints = { HALF_HEIGHT, SPIN_WIDGET_HEIGHT - 1,
 				HALF_HEIGHT };
+
 		private int[] closedXPoints = { 1, 1, HALF_HEIGHT };
 		private int[] closedYPoints = { 1, SPIN_WIDGET_HEIGHT - 1, HALF_HEIGHT };
+
 		private Polygon openTriangle = new Polygon(openXPoints, openYPoints, 3);
 		private Polygon closedTriangle = new Polygon(closedXPoints,
 				closedYPoints, 3);
@@ -129,7 +133,7 @@ public class SpinningPanel extends JPanel {
 
 		public void paint(Graphics g) {
 
-			g.setColor(new Color(100, 104, 111));
+			g.setColor(SpinWidgetColor);
 
 			if (isOpen()) {
 				g.fillPolygon(openTriangle);
