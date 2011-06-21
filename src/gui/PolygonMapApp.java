@@ -21,7 +21,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class PolygonMapApp {
 
 	// Dimension
-	Dimension dimension;
+	private Dimension dimension;
 
 	// Frame
 	private JFrame frame;
@@ -35,6 +35,7 @@ public class PolygonMapApp {
 
 	// Tabs
 	private DrawPolygonMapTab drawPolygonMapTab;
+	private TerminalTab terminalTab;
 
 	public PolygonMapApp() throws ClassNotFoundException,
 			InstantiationException, IllegalAccessException,
@@ -71,6 +72,10 @@ public class PolygonMapApp {
 		// add DrawPolygonMap
 		drawPolygonMapTab = new DrawPolygonMapTab();
 		tabbedPane.add("Draw Map Polygons", drawPolygonMapTab);
+
+		// add Terminal Tab
+		terminalTab = new TerminalTab();
+		tabbedPane.add("Terminal", terminalTab);
 
 		frame.setJMenuBar(mainMenu);
 		frame.add(tabbedPane, BorderLayout.CENTER);
